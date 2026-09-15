@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SkillSwap — Your Skills. Your Marketplace.</title>
+<style>
+:root{
+  --bg:#05051a;--panel:#0c0d2b;--panel2:#12133b;--text:#f7f5ff;--muted:#aaa9ca;
+  --line:rgba(255,255,255,.10);--purple:#8b5cf6;--pink:#ec4899;--cyan:#22d3ee;
+  --green:#34d399;--orange:#fbbf24;--danger:#fb7185;--shadow:0 18px 55px rgba(0,0,0,.38)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;background:
+radial-gradient(circle at 10% 10%,rgba(124,58,237,.20),transparent 28%),
+radial-gradient(circle at 90% 15%,rgba(236,72,153,.16),transparent 25%),
+linear-gradient(135deg,#040417,#09082a 50%,#05051a);min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+
+/* animated intro */
+.splash{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;background:#030313;overflow:hidden;transition:opacity .7s,visibility .7s}
+.splash.hide{opacity:0;visibility:hidden}.stars,.stars:before,.stars:after{content:"";position:absolute;inset:0;background-image:
+radial-gradient(circle,rgba(255,255,255,.8) 1px,transparent 1px);background-size:95px 95px;opacity:.25;animation:drift 12s linear infinite}
+.stars:before{background-size:150px 150px;opacity:.18;animation-duration:20s}.stars:after{background-size:65px 65px;opacity:.12;animation-duration:8s}
+.splashCard{position:relative;text-align:center;z-index:2}.logoBig{width:105px;height:105px;margin:auto;border-radius:30px;display:grid;place-items:center;
+background:linear-gradient(135deg,#22d3ee,#8b5cf6 48%,#ec4899);box-shadow:0 0 55px rgba(139,92,246,.65),inset 0 0 25px rgba(255,255,255,.18);animation:float 2s ease-in-out infinite}
+.logoMark{font-size:58px;font-weight:1000;filter:drop-shadow(0 5px 10px rgba(0,0,0,.25));transform:rotate(-7deg)}
+.splash h1{font-size:48px;margin:20px 0 4px;letter-spacing:-2px}.gradient{background:linear-gradient(90deg,#fff,#c4b5fd,#f9a8d4);-webkit-background-clip:text;background-clip:text;color:transparent}
+.splash p{color:#bdbbd8;margin:0 0 25px}.loader{height:5px;width:230px;background:#171737;border-radius:99px;overflow:hidden;margin:auto}.loader span{display:block;height:100%;width:35%;background:linear-gradient(90deg,#22d3ee,#8b5cf6,#ec4899);animation:load 1.7s ease-in-out infinite}
+
+/* header */
+header{position:sticky;top:0;z-index:30;background:rgba(4,4,22,.72);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.nav{max-width:1280px;margin:auto;padding:13px 22px;display:flex;align-items:center;gap:18px}.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:21px;white-space:nowrap}.miniLogo{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,#22d3ee,#8b5cf6 55%,#ec4899);font-weight:1000;box-shadow:0 0 20px rgba(139,92,246,.35)}
+.search{flex:1;max-width:400px;position:relative}.search input{width:100%;padding:11px 15px 11px 39px;border-radius:14px;border:1px solid var(--line);background:#111333;color:#fff;outline:none}.search input:focus{border-color:#8b5cf6;box-shadow:0 0 0 3px rgba(139,92,246,.13)}.search span{position:absolute;left:13px;top:9px}
+nav{display:flex;gap:6px;margin-left:auto}nav button,.role{border:0;background:transparent;color:#c5c3dc;padding:9px 11px;border-radius:10px}nav button:hover,nav button.active{background:rgba(139,92,246,.15);color:#fff}
+.role{border:1px solid var(--line);background:#111333}.avatarTop{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:linear-gradient(135deg,#f472b6,#8b5cf6);border:2px solid rgba(255,255,255,.25)}
+
+/* layout */
+main{max-width:1280px;margin:auto;padding:22px}.hero{min-height:310px;border:1px solid var(--line);border-radius:25px;padding:38px;position:relative;overflow:hidden;
+background:linear-gradient(120deg,rgba(31,20,92,.92),rgba(64,20,111,.58)),radial-gradient(circle at 80% 30%,rgba(34,211,238,.2),transparent 25%)}
+.hero:before,.hero:after{content:"";position:absolute;border-radius:50%;filter:blur(2px);opacity:.65}.hero:before{width:330px;height:330px;right:-60px;top:-80px;background:radial-gradient(circle at 35% 35%,#ec4899,transparent 62%);animation:orb 6s ease-in-out infinite}.hero:after{width:240px;height:240px;right:180px;bottom:-140px;background:#22d3ee;filter:blur(70px)}
+.heroText{position:relative;z-index:2;max-width:640px}.hero h2{font-size:48px;line-height:1.02;margin:0 0 14px;letter-spacing:-2.5px}.hero p{font-size:16px;color:#d0cee7;line-height:1.6}.heroSearch{display:flex;gap:8px;margin-top:22px}.heroSearch input{flex:1;padding:14px 17px;border:1px solid var(--line);border-radius:15px;background:#090a26;color:#fff}.primary{border:0;color:#fff;padding:13px 18px;border-radius:13px;font-weight:800;background:linear-gradient(135deg,#7c3aed,#ec4899);box-shadow:0 10px 30px rgba(139,92,246,.3);transition:.2s}.primary:hover{transform:translateY(-2px);box-shadow:0 15px 35px rgba(139,92,246,.42)}
+.floatCard{position:absolute;right:55px;top:72px;z-index:2;width:175px;padding:17px;border-radius:19px;background:rgba(10,11,39,.78);border:1px solid rgba(255,255,255,.12);box-shadow:var(--shadow);animation:float 3s ease-in-out infinite}.floatCard:nth-child(2){right:240px;top:170px;animation-delay:-1.2s}.floatIcon{font-size:30px}.floatCard b{display:block;margin-top:7px}.floatCard small{color:#aaa9ca}
+.section{margin-top:25px}.sectionTitle{display:flex;justify-content:space-between;align-items:end;margin-bottom:14px}.sectionTitle h3{margin:0;font-size:23px}.sectionTitle small{color:#a7a4c5}
+.cats{display:grid;grid-template-columns:repeat(11,1fr);gap:8px;overflow:auto;padding-bottom:4px}.cat{min-width:90px;border:1px solid var(--line);background:rgba(12,13,43,.8);border-radius:15px;padding:12px 7px;text-align:center;color:#c8c5df;transition:.2s}.cat:hover,.cat.selected{transform:translateY(-3px);border-color:#8b5cf6;background:rgba(139,92,246,.15);color:#fff}.cat i{font-style:normal;font-size:22px;display:block;margin-bottom:5px}.cat small{font-size:10px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.gig{border:1px solid var(--line);background:linear-gradient(180deg,rgba(18,19,59,.96),rgba(8,9,31,.96));border-radius:18px;overflow:hidden;box-shadow:0 10px 35px rgba(0,0,0,.2);transition:.25s}.gig:hover{transform:translateY(-6px);border-color:rgba(139,92,246,.55);box-shadow:0 18px 45px rgba(76,29,149,.22)}
+.cover{height:135px;position:relative;display:flex;align-items:flex-end;padding:12px;background:linear-gradient(135deg,var(--c1),var(--c2));overflow:hidden}.cover:after{content:"";position:absolute;width:130px;height:130px;border-radius:50%;right:-20px;top:-30px;background:rgba(255,255,255,.17);filter:blur(2px);animation:orb 5s ease-in-out infinite}.coverEmoji{font-size:47px;position:relative;z-index:1;filter:drop-shadow(0 8px 12px rgba(0,0,0,.25));animation:float 4s ease-in-out infinite}.tag{position:absolute;z-index:3;top:10px;left:10px;background:rgba(0,0,0,.45);padding:5px 8px;border-radius:8px;font-size:10px}.new{position:absolute;z-index:3;right:10px;top:10px;background:#34d399;color:#052e24;font-weight:900;padding:5px 8px;border-radius:8px;font-size:10px}
+.gigBody{padding:14px}.creator{display:flex;align-items:center;gap:8px;color:#b9b6d0;font-size:11px}.pic{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:900;border:1px solid rgba(255,255,255,.2)}.rating{margin-left:auto;color:#fbbf24}.gig h4{font-size:15px;margin:10px 0 6px;line-height:1.3}.gig p{font-size:11px;color:#a9a6c2;min-height:34px;line-height:1.5;margin:0}.price{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.price b{font-size:15px}.view{border:1px solid var(--line);background:#12143e;color:#fff;padding:8px 11px;border-radius:10px;font-size:11px}
+
+/* pages/modals */
+.page{display:none}.page.active{display:block}.toolbar{display:flex;gap:10px;flex-wrap:wrap}.toolbar input,.toolbar select,.form input,.form textarea,.form select{background:#0c0d2d;color:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;outline:none}.toolbar input{flex:1;min-width:220px}.panel{background:rgba(12,13,43,.92);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:var(--shadow)}.form{display:grid;gap:13px;max-width:750px}.form label{font-size:12px;color:#b8b5d0}.form textarea{min-height:120px;resize:vertical}.formGrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.avatarPicker{display:grid;grid-template-columns:repeat(8,1fr);gap:10px}.avatarChoice{padding:9px;border:1px solid var(--line);background:#0b0c2d;border-radius:14px;text-align:center;color:#bdb9d3}.avatarChoice.active{border-color:#ec4899;box-shadow:0 0 0 2px rgba(236,72,153,.15)}.face{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;margin:auto;font-size:25px;border:2px solid rgba(255,255,255,.2);animation:float 4s ease-in-out infinite}.avatarChoice small{display:block;margin-top:5px;font-size:9px}
+.preview{display:flex;gap:15px;align-items:center;padding:14px;border:1px dashed rgba(255,255,255,.15);border-radius:15px}.bigFace{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;font-size:38px;animation:pulse 2s infinite}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{padding:18px;border:1px solid var(--line);border-radius:17px;background:#0d0e31}.stat b{font-size:28px;display:block}.stat span{color:#aaa7c2;font-size:11px}.booking{display:grid;grid-template-columns:auto 1fr auto;gap:13px;align-items:center;padding:14px;border-bottom:1px solid var(--line)}.booking:last-child{border-bottom:0}.status{padding:6px 9px;border-radius:9px;font-size:10px;font-weight:800}.pending{background:rgba(251,191,36,.13);color:#fbbf24}.accepted{background:rgba(52,211,153,.13);color:#34d399}.declined{background:rgba(251,113,133,.13);color:#fb7185}.btnRow{display:flex;gap:8px}.success{border:1px solid rgba(52,211,153,.25);background:rgba(52,211,153,.10);color:#6ee7b7;padding:8px 12px;border-radius:10px}.danger{border:1px solid rgba(251,113,133,.25);background:rgba(251,113,133,.10);color:#fda4af;padding:8px 12px;border-radius:10px}
+footer{max-width:1280px;margin:35px auto 0;padding:24px 22px;border-top:1px solid var(--line);color:#9d9ab9;font-size:11px;display:flex;justify-content:space-between}
+.toast{position:fixed;right:20px;bottom:20px;z-index:90;background:#111333;border:1px solid rgba(139,92,246,.5);box-shadow:var(--shadow);padding:14px 17px;border-radius:14px;transform:translateY(120px);opacity:0;transition:.3s}.toast.show{transform:translateY(0);opacity:1}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:80;display:none;place-items:center;padding:20px}.modal.show{display:grid}.modalCard{max-width:620px;width:100%;max-height:90vh;overflow:auto;background:#0b0c2c;border:1px solid var(--line);border-radius:22px;padding:22px}
+.close{float:right;background:#17183e;border:1px solid var(--line);color:#fff;width:35px;height:35px;border-radius:10px}
+
+/* animations */
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(139,92,246,.25)}50%{box-shadow:0 0 0 12px rgba(139,92,246,0)}}@keyframes orb{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-12px,12px) scale(1.08)}}@keyframes load{0%{transform:translateX(-140%)}100%{transform:translateX(600%)}}@keyframes drift{to{transform:translate(80px,40px)}}
+
+@media(max-width:1050px){.grid{grid-template-columns:repeat(3,1fr)}.cats{grid-template-columns:repeat(6,1fr)}.floatCard{display:none}.avatarPicker{grid-template-columns:repeat(4,1fr)}}
+@media(max-width:760px){nav{display:none}.nav{padding:11px 13px}.hero{padding:27px 20px}.hero h2{font-size:36px}.grid{grid-template-columns:repeat(2,1fr)}.stats{grid-template-columns:repeat(2,1fr)}.formGrid{grid-template-columns:1fr}.cats{display:flex}.heroSearch{flex-direction:column}.search{display:none}}
+@media(max-width:480px){main{padding:12px}.grid{grid-template-columns:1fr}.hero{min-height:290px}.splash h1{font-size:38px}}
+</style>
+</head>
+<body>
+
+<div class="splash" id="splash">
+  <div class="stars"></div>
+  <div class="splashCard">
+    <div class="logoBig"><div class="logoMark">S</div></div>
+    <h1><span class="gradient">SkillSwap</span></h1>
+    <p>Your Skills. Your Marketplace.</p>
+    <div class="loader"><span></span></div>
+  </div>
+</div>
+
+<header>
+ <div class="nav">
+  <div class="brand"><div class="miniLogo">S</div><span>Skill<span class="gradient">Swap</span></span></div>
+  <div class="search"><span>⌕</span><input id="topSearch" placeholder="Search for gigs, creators, or skills..." oninput="filterGigs(this.value)"></div>
+  <nav>
+   <button class="active" onclick="showPage('home',this)">Home</button>
+   <button onclick="showPage('browse',this)">Browse</button>
+   <button onclick="showPage('post',this)">Post a Gig</button>
+   <button onclick="showPage('bookings',this)">My Bookings</button>
+   <button onclick="showPage('dashboard',this)">Dashboard</button>
+  </nav>
+  <button class="role" onclick="toggleRole()">Client ▾</button><div class="avatarTop">R</div>
+ </div>
+</header>
+
+<main>
+<section id="home" class="page active">
+ <div class="hero">
+  <div class="heroText">
+   <h2>Turn Your Skills<br>Into <span class="gradient">Opportunities</span></h2>
+   <p>Find talented creators or share your skills. Book gigs, earn, and grow together!</p>
+   <div class="heroSearch"><input id="heroSearch" placeholder="Search for gigs, creators, or skills..." oninput="filterGigs(this.value)"><button class="primary" onclick="showPage('browse')">⌕ Search</button></div>
+  </div>
+  <div class="floatCard"><div class="floatIcon">🎬</div><b>Creative Editing</b><small>12 new creators</small></div>
+  <div class="floatCard"><div class="floatIcon">🎨</div><b>Design & Art</b><small>8 new gigs today</small></div>
+ </div>
+
+ <div class="section">
+  <div class="sectionTitle"><h3>Explore Categories</h3><small>Everything you need, in one place</small></div>
+  <div class="cats" id="cats"></div>
+ </div>
+
+ <div class="section">
+  <div class="sectionTitle"><h3>Newest Gigs 🔥</h3><small id="countText"></small></div>
+  <div class="grid" id="gigGrid"></div>
+ </div>
+</section>
+
+<section id="browse" class="page">
+ <div class="sectionTitle"><h3>Browse Marketplace</h3><small>Newest gigs appear first</small></div>
+ <div class="toolbar panel">
+  <input id="browseSearch" placeholder="Search gigs, creators or skills..." oninput="renderGigs()">
+  <select id="browseCat" onchange="renderGigs()"></select>
+  <select id="sort" onchange="renderGigs()"><option value="new">Newest first</option><option value="price">Lowest price</option><option value="rating">Highest rated</option></select>
+ </div>
+ <div class="section"><div class="grid" id="browseGrid"></div></div>
+</section>
+
+<section id="post" class="page">
+ <div class="sectionTitle"><h3>Post a Gig</h3><small>Show the world what you can do</small></div>
+ <div class="panel form">
+  <div class="formGrid">
+   <label>Gig title<input id="gTitle" placeholder="e.g. Professional Reel Editing"></label>
+   <label>Category<select id="gCat"></select></label>
+   <label>Rate (₹)<input id="gRate" type="number" min="1" placeholder="800"></label>
+   <label>Creator name<input id="gCreator" placeholder="Your creator name"></label>
+  </div>
+  <label>Description<textarea id="gDesc" placeholder="Describe your service, delivery time and what the client gets..."></textarea></label>
+  <label>Choose your animated profile picture</label>
+  <div class="avatarPicker" id="avatarPicker"></div>
+  <div class="preview"><div id="previewFace" class="bigFace">😎</div><div><b id="previewName">Your Creator Profile</b><div style="color:#aaa7c2;font-size:11px">Animated creator avatar • ready for the marketplace</div></div></div>
+  <button class="primary" onclick="postGig()">Publish Gig ✨</button>
+ </div>
+</section>
+
+<section id="bookings" class="page">
+ <div class="sectionTitle"><h3>My Bookings</h3><small>Track every request</small></div>
+ <div class="panel" id="bookingList"></div>
+</section>
+
+<section id="dashboard" class="page">
+ <div class="sectionTitle"><h3>Creator Dashboard</h3><small>Manage your gigs and incoming bookings</small></div>
+ <div class="stats">
+  <div class="stat"><b id="statGigs">12</b><span>Active Gigs</span></div>
+  <div class="stat"><b id="statPending">0</b><span>Pending Requests</span></div>
+  <div class="stat"><b id="statAccepted">0</b><span>Accepted</span></div>
+  <div class="stat"><b>4.9</b><span>Average Rating</span></div>
+ </div>
+ <div class="section panel"><h3 style="margin-top:0">Incoming Bookings</h3><div id="dashboardList"></div></div>
+</section>
+</main>
+
+<footer><div><b style="color:#fff">Skill<span class="gradient">Swap</span></b> — Your Skills. Your Marketplace.</div><div>Skills change lives ♥</div></footer>
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="gigModal"><div class="modalCard"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
+
+<script>
+const categories=[
+ ['All','✨'],['Video Editing','🎬'],['Graphic Design','🎨'],['Photography','📷'],['Writing','✍️'],['Voiceover','🎙️'],['Animation','🪄'],['Music','🎵'],['Social Media','📱'],['Illustration','🖌️'],['3D & Motion','🧊'],['Other','⋯']
+];
+const avatars=[
+ ['😎','Cartoon','linear-gradient(135deg,#38bdf8,#8b5cf6)'],['👩🏻‍🎤','Anime','linear-gradient(135deg,#f472b6,#7c3aed)'],
+ ['🧑🏽‍🎨','Neon','linear-gradient(135deg,#22d3ee,#ec4899)'],['🧑🏼‍💻','Minimal','linear-gradient(135deg,#94a3b8,#475569)'],
+ ['👩🏽','Realistic','linear-gradient(135deg,#fb7185,#f59e0b)'],['🧔🏻‍♂️','Pixel','linear-gradient(135deg,#34d399,#0891b2)'],
+ ['👩🏿‍🎨','Glow','linear-gradient(135deg,#a78bfa,#ec4899)'],['🧑🏻‍🚀','3D','linear-gradient(135deg,#60a5fa,#8b5cf6)'],
+ ['🧑🏽‍🎤','Pop','linear-gradient(135deg,#f43f5e,#8b5cf6)'],['👩🏻‍💼','Pro','linear-gradient(135deg,#14b8a6,#6366f1)'],
+ ['🧑🏼‍🎧','Music','linear-gradient(135deg,#f59e0b,#ef4444)'],['👩🏽‍🎬','Creator','linear-gradient(135deg,#06b6d4,#8b5cf6)']
+];
+const gigs=[
+['Video Editing','🎬','Cinematic Reel Editing','Aarav Visuals',800,'Fast, cinematic reels with captions, transitions and beat sync.'],
+['Video Editing','🎥','Podcast Video Editing','CutPro Studio',1500,'Clean multicam edits, subtitles, clips and social-ready exports.'],
+['Graphic Design','🎨','Logo & Brand Identity Design','PixelCraft',1200,'Modern logo, color palette and starter brand kit for your idea.'],
+['Graphic Design','🖼️','YouTube Thumbnail Design','ClickMagic',450,'High-converting thumbnails with 2 concepts and revisions.'],
+['Graphic Design','💻','Presentation Design','SlideSpark',900,'Polished pitch decks, college presentations and startup slides.'],
+['Photography','📷','Portrait Photography','Lens & Light',1000,'Creative portraits with professional editing and color grading.'],
+['Photography','📦','Product Photography','FrameFoundry',1300,'Clean product shots for websites, stores and social media.'],
+['Writing','✍️','Blog & SEO Writing','WordWeaver',600,'Research-backed articles written for readers and search engines.'],
+['Writing','📝','Brand Story Copywriting','StorySmith',1000,'Memorable About pages, bios and brand stories that sound human.'],
+['Writing','📄','Resume & LinkedIn Writing','CareerInk',750,'ATS-friendly resume plus a strong professional profile rewrite.'],
+['Voiceover','🎙️','Hindi + English Voiceover','VoiceVibes',700,'Natural bilingual voiceover for ads, reels, explainers and apps.'],
+['Voiceover','🎧','Podcast Intro Voiceover','MicMuse',550,'Warm, energetic intros and outros delivered in studio quality.'],
+['Animation','🪄','2D Logo Animation','DreamFrame',1500,'Eye-catching logo reveal with sound-ready animation.'],
+['Animation','🌈','Animated Social Posts','MotionMint',900,'Looping animated posts and stories that stand out in feeds.'],
+['Social Media','📱','Instagram Content Pack','BoostStart',850,'10 branded posts, captions and hashtag suggestions.'],
+['Social Media','📈','Social Media Strategy','TrendPilot',1200,'Content calendar and growth ideas tailored to your niche.'],
+['Music','🎵','Lo-fi Background Music','BeatStudio',1000,'Original chill background tracks for videos and streams.'],
+['Music','🎹','Jingle & Short Theme','TuneForge',1400,'Catchy original jingles for brands, podcasts and creators.'],
+['Illustration','🖌️','Custom Digital Illustration','ArtByRhea',800,'Personalized digital artwork for gifts, profiles and projects.'],
+['Illustration','🧑‍🎨','Mascot Character Design','DoodleDen',1100,'Unique mascot concept with expressive poses and clean delivery.'],
+['3D & Motion','🧊','3D Product Motion Ad','Pixel3D',2000,'Short 3D product animation for ads and launch campaigns.'],
+['3D & Motion','🚀','3D Logo & Intro','RenderRush',1800,'Premium 3D logo reveal with cinematic lighting and motion.'],
+['Other','💡','College Project UI Design','IdeaLab',900,'Modern UI screens and design direction for student projects.'],
+['Other','🧑‍🏫','Beginner Coding Mentoring','CodeBuddy',700,'Friendly one-on-one help for Python, web and programming basics.']
+].map((x,i)=>({id:'g'+i,cat:x[0],emoji:x[1],title:x[2],creator:x[3],price:x[4],desc:x[5],rating:(4.6+(i%5)*.1).toFixed(1),new:i<8,avatar:avatars[i%avatars.length]}));
+
+let bookings=JSON.parse(localStorage.getItem('skillswap_bookings')||'[]');
+let extra=JSON.parse(localStorage.getItem('skillswap_extra_gigs')||'[]');
+let allGigs=[...extra,...gigs];
+let selectedAvatar=avatars[0];
+
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ if(id==='browse')renderGigs(); if(id==='bookings')renderBookings(); if(id==='dashboard')renderDashboard();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function filterGigs(q){document.getElementById('browseSearch').value=q;showPage('browse');renderGigs()}
+function renderCats(){
+ const c=document.getElementById('cats'); c.innerHTML=categories.map((x,i)=>`<button class="cat ${i===0?'selected':''}" onclick="chooseCat('${x[0]}',this)"><i>${x[1]}</i><small>${x[0]}</small></button>`).join('');
+ document.getElementById('browseCat').innerHTML=categories.map(x=>`<option>${x[0]}</option>`).join('');
+ document.getElementById('gCat').innerHTML=categories.slice(1).map(x=>`<option>${x[0]}</option>`).join('');
+}
+function chooseCat(cat,el){document.querySelectorAll('.cat').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');document.getElementById('browseCat').value=cat;showPage('browse');renderGigs()}
+function card(g){
+ const colors=[['#4338ca','#ec4899'],['#0e7490','#7c3aed'],['#7c2d12','#db2777'],['#047857','#4f46e5'],['#9d174d','#2563eb'],['#4338ca','#0891b2']];
+ const c=colors[allGigs.indexOf(g)%colors.length];
+ return `<article class="gig"><div class="cover" style="--c1:${c[0]};--c2:${c[1]}"><span class="tag">${g.cat}</span>${g.new?'<span class="new">NEW</span>':''}<div class="coverEmoji">${g.emoji}</div></div>
+ <div class="gigBody"><div class="creator"><span class="pic" style="background:${g.avatar[2]}">${g.avatar[0]}</span>${g.creator}<span class="rating">★ ${g.rating}</span></div>
+ <h4>${g.title}</h4><p>${g.desc}</p><div class="price"><b>₹${g.price.toLocaleString()} <small style="color:#aaa7c2;font-weight:400">/ project</small></b><button class="view" onclick="openGig('${g.id}')">View Gig</button></div></div></article>`
+}
+function renderHome(){document.getElementById('gigGrid').innerHTML=allGigs.slice(0,12).map(card).join('');document.getElementById('countText').textContent=allGigs.length+' gigs available'}
+function renderGigs(){
+ const q=(document.getElementById('browseSearch').value||'').toLowerCase(),cat=document.getElementById('browseCat').value,sort=document.getElementById('sort').value;
+ let list=allGigs.filter(g=>(cat==='All'||g.cat===cat)&&[g.title,g.creator,g.cat,g.desc].join(' ').toLowerCase().includes(q));
+ if(sort==='price')list.sort((a,b)=>a.price-b.price);else if(sort==='rating')list.sort((a,b)=>b.rating-a.rating);
+ else list.sort((a,b)=>Number(b.new)-Number(a.new));
+ document.getElementById('browseGrid').innerHTML=list.length?list.map(card).join(''):'<div class="panel" style="grid-column:1/-1;text-align:center">No gigs found. Try another search.</div>';
+}
+function openGig(id){
+ const g=allGigs.find(x=>x.id===id); if(!g)return;
+ document.getElementById('modalBody').innerHTML=`<div class="cover" style="--c1:#4338ca;--c2:#ec4899;border-radius:16px;height:180px"><div class="coverEmoji" style="font-size:70px">${g.emoji}</div></div>
+ <div style="display:flex;align-items:center;gap:10px;margin-top:15px"><div class="pic" style="width:44px;height:44px;background:${g.avatar[2]}">${g.avatar[0]}</div><div><b>${g.creator}</b><div style="color:#fbbf24;font-size:12px">★ ${g.rating} • ${g.cat}</div></div></div>
+ <h2>${g.title}</h2><p style="color:#aaa7c2;line-height:1.7">${g.desc}</p><div class="panel" style="margin:15px 0;background:#080927"><b>₹${g.price.toLocaleString()} / project</b><br><span style="font-size:11px;color:#aaa7c2">Typical delivery: 3–5 days • Revisions included</span></div>
+ <div class="form"><label>Your name<input id="clientName" placeholder="Enter your name"></label><label>Project details<textarea id="projectDetails" placeholder="Tell the creator what you need..."></textarea></label><label>Deadline<input id="deadline" type="date"></label><button class="primary" onclick="bookGig('${g.id}')">Confirm Booking — ₹${g.price.toLocaleString()}</button></div>`;
+ document.getElementById('gigModal').classList.add('show');
+}
+function closeModal(){document.getElementById('gigModal').classList.remove('show')}
+function bookGig(id){
+ const g=allGigs.find(x=>x.id===id); const name=document.getElementById('clientName').value.trim()||'Guest Client';
+ bookings.unshift({id:'b'+Date.now(),gigId:id,title:g.title,creator:g.creator,client:name,details:document.getElementById('projectDetails').value||'Project request',deadline:document.getElementById('deadline').value||'Flexible',status:'Pending',price:g.price});
+ localStorage.setItem('skillswap_bookings',JSON.stringify(bookings));closeModal();toast('Booking sent! The creator can now accept or decline.');renderBookings();renderDashboard();
+}
+function renderBookings(){
+ const box=document.getElementById('bookingList');if(!bookings.length){box.innerHTML='<div style="text-align:center;color:#aaa7c2;padding:40px">No bookings yet. Browse the marketplace and book a gig ✨</div>';return}
+ box.innerHTML=bookings.map(b=>`<div class="booking"><div class="pic" style="width:42px;height:42px;background:linear-gradient(135deg,#8b5cf6,#ec4899)">S</div><div><b>${b.title}</b><div style="font-size:11px;color:#aaa7c2">${b.creator} • ${b.client} • ₹${b.price}</div><div style="font-size:10px;color:#8f8cab;margin-top:4px">${b.details} • Deadline: ${b.deadline}</div>${b.status==='Declined'?'<button class="view" style="margin-top:7px" onclick="findSimilar(\''+b.gigId+'\')">Find Similar Gigs</button>':''}</div><span class="status ${b.status.toLowerCase()}">${b.status}</span></div>`).join('');
+}
+function findSimilar(id){const g=allGigs.find(x=>x.id===id);document.getElementById('browseCat').value=g.cat;showPage('browse');renderGigs();toast('Showing similar '+g.cat+' gigs.')}
+function renderDashboard(){
+ document.getElementById('statGigs').textContent=allGigs.length;document.getElementById('statPending').textContent=bookings.filter(b=>b.status==='Pending').length;document.getElementById('statAccepted').textContent=bookings.filter(b=>b.status==='Accepted').length;
+ const box=document.getElementById('dashboardList');if(!bookings.length){box.innerHTML='<div style="color:#aaa7c2;padding:20px 0">No incoming bookings yet.</div>';return}
+ box.innerHTML=bookings.map(b=>`<div class="booking"><div class="pic" style="width:42px;height:42px;background:linear-gradient(135deg,#22d3ee,#8b5cf6)">👤</div><div><b>${b.title}</b><div style="font-size:11px;color:#aaa7c2">${b.client} • ₹${b.price} • ${b.deadline}</div></div><div>${b.status==='Pending'?`<div class="btnRow"><button class="success" onclick="setStatus('${b.id}','Accepted')">Accept</button><button class="danger" onclick="setStatus('${b.id}','Declined')">Decline</button></div>`:`<span class="status ${b.status.toLowerCase()}">${b.status}</span>`}</div></div>`).join('');
+}
+function setStatus(id,status){const b=bookings.find(x=>x.id===id);if(b)b.status=status;localStorage.setItem('skillswap_bookings',JSON.stringify(bookings));renderBookings();renderDashboard();toast('Booking marked '+status+'.')}
+function toggleRole(){toast('Role switched for demo: '+(document.querySelector('.role').textContent.includes('Client')?'Creator':'Client'));document.querySelector('.role').textContent=document.querySelector('.role').textContent.includes('Client')?'Creator ▾':'Client ▾'}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)}
+function renderAvatars(){
+ document.getElementById('avatarPicker').innerHTML=avatars.map((a,i)=>`<button class="avatarChoice ${i===0?'active':''}" onclick="pickAvatar(${i},this)"><div class="face" style="background:${a[2]}">${a[0]}</div><small>${a[1]}</small></button>`).join('');
+}
+function pickAvatar(i,el){selectedAvatar=avatars[i];document.querySelectorAll('.avatarChoice').forEach(x=>x.classList.remove('active'));el.classList.add('active');document.getElementById('previewFace').style.background=selectedAvatar[2];document.getElementById('previewFace').textContent=selectedAvatar[0]}
+function postGig(){
+ const title=document.getElementById('gTitle').value.trim(),creator=document.getElementById('gCreator').value.trim()||'New Creator',price=Number(document.getElementById('gRate').value),desc=document.getElementById('gDesc').value.trim(),cat=document.getElementById('gCat').value;
+ if(!title||!price||!desc){toast('Please fill in title, rate and description.');return}
+ const g={id:'x'+Date.now(),cat,emoji:categories.find(x=>x[0]===cat)?.[1]||'✨',title,creator,price,desc,rating:'5.0',new:true,avatar:selectedAvatar};
+ extra.unshift(g);allGigs=[...extra,...gigs];localStorage.setItem('skillswap_extra_gigs',JSON.stringify(extra));renderHome();renderGigs();renderDashboard();toast('Your gig is live on SkillSwap! ✨');
+ ['gTitle','gRate','gCreator','gDesc'].forEach(id=>document.getElementById(id).value='');
+}
+window.addEventListener('load',()=>{renderCats();renderAvatars();renderHome();renderBookings();renderDashboard();setTimeout(()=>document.getElementById('splash').classList.add('hide'),2100)})
+</script>
+</body>
+</html>
